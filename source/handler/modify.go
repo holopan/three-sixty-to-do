@@ -13,23 +13,37 @@ func ModifyToDo(res http.ResponseWriter, req *http.Request) {
 	detail := req.FormValue("detail")
 	status := req.FormValue("status")
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		//return error
-		return
-	}
-	if status != "pending" && status != "done" {
-		//return error
-		return
-	}
-
 	writer := common.Writer{
 		Resp: res,
 	}
 
+	if idStr == "" {
+		writer.ResponseError(common.ErrorIDEmpty)
+		return
+	}
+	if title == "" {
+		writer.ResponseError(common.ErrorTitleEmpty)
+		return
+	}
+	if status == "" {
+		writer.ResponseError(common.ErrorStatusEmpty)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		writer.ResponseError(common.ErrorIDInvalid)
+		return
+	}
+
+	if status != "pending" && status != "done" {
+		writer.ResponseError(common.ErrorStatusInvalid)
+		return
+	}
+
 	data, err := common.ModifyTodo(id, title, detail, status)
 	if err != nil {
-		//return error
+		writer.ResponseError(common.ErrorInternal)
 		return
 	}
 
@@ -46,30 +60,36 @@ func ModifyStatusToDo(res http.ResponseWriter, req *http.Request) {
 	idStr := req.FormValue("id")
 	status := req.FormValue("status")
 
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		//return error
-		return
-	}
-	if status != "pending" && status != "done" {
-		//return error
-		return
-	}
-
 	writer := common.Writer{
 		Resp: res,
 	}
 
-	input, err := common.GetToDo(id)
-	if err != nil {
-		//return error
+	if idStr == "" {
+		writer.ResponseError(common.ErrorIDEmpty)
 		return
 	}
+	if status == "" {
+		writer.ResponseError(common.ErrorStatusEmpty)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		writer.ResponseError(common.ErrorIDInvalid)
+		return
+	}
+
+	input, err := common.GetToDo(id)
+	if err != nil {
+		writer.ResponseError(common.ErrorTodoNotFound)
+		return
+	}
+
 	input.Status = status
 
 	data, err := common.ModifyTodo(input.ID, input.Title, input.Detail, input.Status)
 	if err != nil {
-		//return error
+		writer.ResponseError(common.ErrorInternal)
 		return
 	}
 

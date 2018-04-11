@@ -39,7 +39,7 @@ func ViewAllToDo(res http.ResponseWriter, req *http.Request) {
 
 	data, err := common.GetAllToDo()
 	if err != nil {
-		//return err
+		writer.ResponseError(common.ErrorInternal)
 	}
 
 	writer.Response(common.SuccessResponse{
@@ -52,17 +52,22 @@ func ViewAllToDo(res http.ResponseWriter, req *http.Request) {
 
 //ViewToDo is handler function for Router /view/all
 func ViewToDo(indexStr string, res http.ResponseWriter, req *http.Request) {
-	index, err := strconv.Atoi(indexStr)
-	if err != nil {
-		//return error
-		return
-	}
 
 	writer := common.Writer{
 		Resp: res,
 	}
 
+	index, err := strconv.Atoi(indexStr)
+	if err != nil {
+		writer.ResponseError(common.ErrorIDInvalid)
+		return
+	}
+
 	data, err := common.GetToDo(index)
+	if err != nil {
+		writer.ResponseError(common.ErrorTodoNotFound)
+		return
+	}
 
 	writer.Response(common.SuccessResponse{
 		Status:  true,

@@ -1,26 +1,13 @@
 package common
 
-var (
-	TodoList []TodoDetail
-	UID      int
-	TodoMap  map[int]TodoDetail
+import (
+	"fmt"
+	"net/http"
 )
 
-type (
-	// SuccessResponse struct of response when success case
-	SuccessResponse struct {
-		Status  bool        `json:"status"`
-		Message string      `json:"message"`
-		Data    interface{} `json:"data"`
-	}
-
-	//TodoDetail is struct for
-	TodoDetail struct {
-		ID     int    `json:"id"`
-		Title  string `json:"title"`
-		Detail string `json:"detail"`
-		Status string `json:"status"`
-	}
+var (
+	UID     int
+	TodoMap map[int]TodoDetail
 )
 
 //AddTodo is function for add Todo
@@ -51,7 +38,7 @@ func GetAllToDo() (*[]TodoDetail, error) {
 func GetToDo(key int) (*TodoDetail, error) {
 	value := TodoMap[key]
 	if value.ID == 0 {
-		return nil, nil
+		return nil, fmt.Errorf("id not found")
 	}
 	return &value, nil
 }
@@ -59,8 +46,7 @@ func GetToDo(key int) (*TodoDetail, error) {
 //ModifyTodo is function for add Todo
 func ModifyTodo(key int, title string, detail string, status string) (*TodoDetail, error) {
 	if TodoMap[key].ID == 0 {
-		//return error
-		return nil, nil
+		return nil, fmt.Errorf("id not found")
 	}
 	todoDetail := TodoDetail{
 		ID:     key,
@@ -78,4 +64,53 @@ func RemoveTodo(key int) error {
 	delete(TodoMap, key)
 
 	return nil
+}
+
+//ErrorInternal .
+var ErrorInternal ErrorResponse = ErrorResponse{
+	Error:            "internal_server_error",
+	ErrorDescription: "internal server error",
+	HTTPStatus:       http.StatusInternalServerError,
+}
+
+//ErrorTitleEmpty .
+var ErrorTitleEmpty ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "receive no title",
+	HTTPStatus:       http.StatusBadRequest,
+}
+
+//ErrorIDEmpty .
+var ErrorIDEmpty ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "receive no id",
+	HTTPStatus:       http.StatusBadRequest,
+}
+
+//ErrorStatusEmpty .
+var ErrorStatusEmpty ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "receive no status",
+	HTTPStatus:       http.StatusBadRequest,
+}
+
+//ErrorIDInvalid .
+var ErrorIDInvalid ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "id invalid",
+	HTTPStatus:       http.StatusBadRequest,
+}
+
+//ErrorStatusInvalid .
+var ErrorStatusInvalid ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "status invalid",
+	HTTPStatus:       http.StatusBadRequest,
+}
+
+//ErrorTodoNotFound .
+var ErrorTodoNotFound ErrorResponse = ErrorResponse{
+	Error:            "invalid_request",
+	ErrorDescription: "To Do list not found",
+	HTTPStatus:       http.StatusBadRequest,
 }
