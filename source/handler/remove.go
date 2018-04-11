@@ -9,20 +9,32 @@ import (
 //RemoveToDo is handler function for Router /remove
 func RemoveToDo(res http.ResponseWriter, req *http.Request) {
 	idStr := req.FormValue("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		//return error
-		return
-	}
-
 	writer := common.Writer{
 		Resp: res,
 	}
+
+	if idStr == "" {
+		writer.ResponseError(common.ErrorIDEmpty)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		writer.ResponseError(common.ErrorIDInvalid)
+		return
+	}
+
 	data, err := common.GetToDo(id)
 	if err != nil {
-		//return error
+		writer.ResponseError(common.ErrorTodoNotFound)
+		return
 	}
-	common.RemoveTodo(id)
+
+	err = common.RemoveTodo(id)
+	if err != nil {
+		writer.ResponseError(common.ErrorInternal)
+		return
+	}
 
 	writer.Response(common.SuccessResponse{
 		Status:  true,

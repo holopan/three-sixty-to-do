@@ -13,6 +13,12 @@ func AddToDo(res http.ResponseWriter, req *http.Request) {
 	writer := common.Writer{
 		Resp: res,
 	}
+
+	if title == "" {
+		writer.ResponseError(common.ErrorTitleEmpty)
+		return
+	}
+
 	data := common.AddTodo(title, detail)
 
 	writer.Response(common.SuccessResponse{
