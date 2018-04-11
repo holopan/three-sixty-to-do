@@ -25,11 +25,10 @@ func ViewHandler(res http.ResponseWriter, req *http.Request) {
 		} else {
 			ViewToDo(inputID, res, req)
 		}
-		return
 	} else {
 		res.WriteHeader(http.StatusNotFound)
-		return
 	}
+	return
 }
 
 //ViewAllToDo is handler function for Router /view/all
@@ -38,10 +37,15 @@ func ViewAllToDo(res http.ResponseWriter, req *http.Request) {
 		Resp: res,
 	}
 
+	data, err := common.GetAllToDo()
+	if err != nil {
+		//return err
+	}
+
 	writer.Response(common.SuccessResponse{
 		Status:  true,
 		Message: "success",
-		Data:    common.TodoList,
+		Data:    data,
 	})
 
 }
@@ -54,24 +58,16 @@ func ViewToDo(indexStr string, res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if common.TodoList == nil {
-		//return error
-		return
-	} else if index < 0 {
-		//return error
-		return
-	} else if len(common.TodoList) < index {
-		//return error
-		return
-	}
 	writer := common.Writer{
 		Resp: res,
 	}
 
+	data, err := common.GetToDo(index)
+
 	writer.Response(common.SuccessResponse{
 		Status:  true,
 		Message: "success",
-		Data:    common.TodoList[index],
+		Data:    data,
 	})
 
 }
