@@ -1,37 +1,9 @@
-## Welcome to GitHub Pages
+Hello. This is my testing project name to do list using docker and no need to setup db ,please enjoy :)
 
-You can use the [editor on GitHub](https://github.com/holopan/three-sixty-to-do/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+#runing script
+docker build -t to-do-list .
+docker run -p 1112:1112 --name to-do-list-project -d to-do-list:latest
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/holopan/three-sixty-to-do/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+#stop and remove
+docker stop to-do-list-project
+docker rm to-do-list-project
