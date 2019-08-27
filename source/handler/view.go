@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"to-do-list/source/common"
+	"three-sixty-to-do/source/common"
 )
 
 //ViewHandler is handler function for manage Router /view/

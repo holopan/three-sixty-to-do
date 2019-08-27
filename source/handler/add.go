@@ -2,7 +2,7 @@ package handler
 
 import (
 	"net/http"
-	"to-do-list/source/common"
+	"three-sixty-to-do/source/common"
 )
 
 //AddToDo is handler function for Router /add

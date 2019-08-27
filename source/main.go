@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"to-do-list/source/common"
-	"to-do-list/source/handler"
+	"three-sixty-to-do/source/common"
+	"three-sixty-to-do/source/handler"
 )
 
 func init() {

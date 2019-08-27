@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"to-do-list/source/common"
+	"three-sixty-to-do/source/common"
 )
 
 //RemoveToDo is handler function for Router /remove
